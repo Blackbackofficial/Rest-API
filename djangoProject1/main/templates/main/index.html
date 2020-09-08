@@ -1,0 +1,17 @@
+{% extends 'main/main.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+<h1>Вывод пользователей:</h1>
+    {% if persons != null %}
+        {% for obj in persons %} {# это Jinja2 те шаблон #}
+            <div class="alert alert-secondary">
+                <h3>{{ obj.person }}</h3>
+                <h3>{{ obj.title }}</h3>
+            </div>
+        {% endfor %}
+        {% else %}
+        <p>Нет записей</p>
+    {% endif %}
+<p>Контент главной страницы</p>
+{% endblock %}

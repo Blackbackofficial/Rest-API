@@ -1,0 +1,21 @@
+{% extends 'main/main.html' %}
+
+{% block title %} Создать пользователя {% endblock %}
+
+{% block content %}
+<h2>Создадим пользователя</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            <b>Имя:</b>
+        </label>
+        {{ form.title }}
+        <label>
+            <b>Описание:</b>
+        </label>
+        {{ form.person }}
+        <button type="submit" class="btn btn-outline-success">Сохранить</button>
+        <span>{{ error }}</span>
+    </form>
+    <button method="delete" type="submit" class="btn btn-outline-danger">Удалить</button>
+{% endblock %}

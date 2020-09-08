@@ -31,10 +31,6 @@ def create(request):
         else:
             error = 'Ошибка'
 
-    if request.method == 'DELETE':
-        PersonForm.objects.filter(id=3).delete()
-    else:
-        error = 'Ошибка'
     form = PersonForm()
     context = {
         'form': form,

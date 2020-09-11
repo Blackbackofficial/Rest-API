@@ -1,6 +1,5 @@
 from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
-from rest_framework.generics import get_object_or_404
 from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.parsers import JSONParser
@@ -11,57 +10,7 @@ from .models import Person
 from .serializers import PersonSerializer
 
 
-# class PersonView(APIView):
-#
-#     def get(self, request, pk):
-#         if request.method == 'GET':
-#             try:
-#                 persons = Person.objects.get(pk=pk)
-#                 persons_serializer = PersonSerializer(persons)
-#                 return Response(persons_serializer.data)
-#             except Exception as ex:
-#                 print(ex)
-#
-#     # def get(self, request):
-#     #     if request.method == 'GET':
-#     #         try:
-#     #             persons = Person.objects.all()
-#     #
-#     #             serializer = PersonSerializer(persons, many=True)
-#     #             return Response({"persons": serializer.data})
-#     #         except Exception as ex:
-#     #             print(ex)
-#
-#     def post(self, request):
-#         if request.method == 'POST':
-#             try:
-#                 persons = JSONParser().parse(request)
-#                 persons_saved = ""
-#                 serializer = PersonSerializer(data=persons)
-#                 if serializer.is_valid(raise_exception=True):
-#                     persons_saved = serializer.save()
-#                     # HttpResponse.__setitem__("Location", "efwdweewdwed")
-#                     resp = JsonResponse(persons_saved.id, status=status.HTTP_201_CREATED, safe=False)
-#                     print((resp.__class__, resp))
-#                     Resp = resp.__setitem__("Location", "https://rsoi-person-service.herokuapp.com/person/{personId}")
-#                     print(resp.__class__, resp)
-#                     return JsonResponse(Resp, safe=False)
-#                 return JsonResponse(persons_saved.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
-#             except Person.DoesNotExist:
-#                 return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND)
-#
-#     def patch(self, request, pk):
-#         if request.method == 'PATCH':
-#             person_save = get_object_or_404(Person.objects.all(), id=pk)
-#             person = JSONParser().parse(request)
-#             serializer = PersonSerializer(instance=person_save, data=person, partial=True)
-#             if serializer.is_valid(raise_exception=True):
-#                 person_save = serializer.save()
-#             return JsonResponse({
-#                 "success": "Persons '{}' updated successfully".format(person_save.person)
-#             })
-
-
+#  Rest API CRUD
 @api_view(['GET'])
 def get_persons(request, pk):
     if request.method == 'GET':
@@ -76,18 +25,15 @@ def get_persons(request, pk):
 @api_view(['GET'])
 def all_persons(request):
     if request.method == 'GET':
-        try:
-            persons = Person.objects.all()
-            serializer = PersonSerializer(persons, many=True)
-            return JsonResponse({"persons": serializer.data})
-        except Exception as ex:
-            print(ex)
+        persons = Person.objects.all()
+        serializer = PersonSerializer(persons, many=True)
+        return JsonResponse({"persons": serializer.data})
 
 
 @api_view(['PATCH', 'DELETE'])
 def up_del_person(request, pk):
     try:
-        person_safe = Person.objects.get(pk=pk)
+        person_safe = Person.objects.get(id=pk)
     except Person.DoesNotExist:
         return JsonResponse({'message': 'The tutorial does not exist or No Content'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -115,10 +61,15 @@ def creat_persons(request):
         serializer = PersonSerializer(data=persons)
         if serializer.is_valid(raise_exception=True):
             persons_saved = serializer.save()
-            return JsonResponse(persons_saved.person, status=status.HTTP_201_CREATED, safe=False)
+            response = JsonResponse(persons_saved.id, status=status.HTTP_201_CREATED, safe=False)
+            response.headers['Location'] = (
+                'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
+            )
+            return response
         return JsonResponse(persons_saved.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 
 
+# SiteView
 def index(request):
     # persons = Person.objects.all()  # Можно вывести все
     persons = Person.objects.order_by('-person')  # А так же можно отсортировать полюбому другому полю, можно указать

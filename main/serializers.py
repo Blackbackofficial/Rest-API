@@ -4,6 +4,7 @@ from .models import Person
 
 class PersonSerializer(serializers.Serializer):
     person = serializers.CharField()
+    # id = serializers.IntegerField()
 
     def create(self, validated_data):
         return Person.objects.create(**validated_data)

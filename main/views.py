@@ -69,8 +69,8 @@ def get_persons(request, pk):
             persons = Person.objects.get(pk=pk)
             persons_serializer = PersonSerializer(persons)
             return JsonResponse(persons_serializer.data)
-        except Exception as ex:
-            print(ex)
+        except Person.DoesNotExist:
+            return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -86,19 +86,25 @@ def all_persons(request):
 
 @api_view(['PATCH', 'DELETE'])
 def up_del_person(request, pk):
+    try:
+        person_safe = Person.objects.get(pk=pk)
+    except Person.DoesNotExist:
+        return JsonResponse({'message': 'The tutorial does not exist or No Content'}, status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'PATCH':
-        person_save = get_object_or_404(Person.objects.all(), id=pk)
         person = JSONParser().parse(request)
-        serializer = PersonSerializer(instance=person_save, data=person, partial=True)
+        serializer = PersonSerializer(instance=person_safe, data=person, partial=True)
         if serializer.is_valid(raise_exception=True):
             person_save = serializer.save()
-        return JsonResponse({"success": "Persons '{}' updated successfully".format(person_save.person)})
+            return JsonResponse({
+                "success": "Persons '{}' updated successfully".format(person_save.person)
+            })
 
     if request.method == 'DELETE':
-        person = get_object_or_404(Person.objects.all(), pk=pk)
-        person.delete()
-        return JsonResponse({"message": "Person with id `{}` has been deleted.".format(pk)},
-                            status=status.HTTP_204_NO_CONTENT)
+        person_safe.delete()
+        return JsonResponse({
+            "message": "Person with id `{}` has been deleted.".format(pk)
+        }, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['POST'])
@@ -110,7 +116,7 @@ def creat_persons(request):
         if serializer.is_valid(raise_exception=True):
             persons_saved = serializer.save()
             return JsonResponse(persons_saved.person, status=status.HTTP_201_CREATED, safe=False)
-        return JsonResponse(persons_saved.errors, status=status.HTTP_404_NOT_FOUND, safe=False)  # Добавить ошибку 404
+        return JsonResponse(persons_saved.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 
 
 def index(request):

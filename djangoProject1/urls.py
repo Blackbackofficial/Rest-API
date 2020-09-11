@@ -18,5 +18,6 @@ from django.urls import path, include  # наши функции
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # если мы переходим на наш главный сайт
-    path('', include("main.urls"))  # тогда переходим в файл urls нашего проекта main
+    path('', include("main.urls")),  # тогда переходим в файл urls нашего проекта main
+    # path('', include("main.urls")),
 ]

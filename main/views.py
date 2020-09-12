@@ -1,9 +1,8 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from rest_framework.views import APIView
 from .forms import PersonForm
 from .models import Person
 from .serializers import PersonSerializer
@@ -26,7 +25,7 @@ def all_persons(request):
     if request.method == 'GET':
         persons = Person.objects.all()
         serializer = PersonSerializer(persons, many=True)
-        return JsonResponse({"persons": serializer.data})
+        return JsonResponse({"persons": serializer.data}, safe=False)
 
 
 @api_view(['PATCH', 'DELETE'])
@@ -42,7 +41,7 @@ def up_del_person(request, pk):
         if serializer.is_valid(raise_exception=True):
             person_save = serializer.save()
             return JsonResponse({
-                "success": "Persons '{}' updated successfully".format(person_save.person)
+                "success": "Persons '{}' updated successfully".format(person_save.name)
             })
 
     if request.method == 'DELETE':
@@ -58,15 +57,15 @@ def creat_persons(request):
         persons = JSONParser().parse(request)
         last_id = Person.objects.count() + 1
         persons['id'] = last_id
-        serializer = PersonSerializer(data=persons)
-        if serializer.is_valid(raise_exception=True):
-            persons_saved = serializer.save()
+        person_serializer = PersonSerializer(data=persons)
+        if person_serializer.is_valid():
+            persons_saved = person_serializer.save()
             response = JsonResponse(persons_saved.id, status=status.HTTP_201_CREATED, safe=False)
             response.headers['Location'] = (
                 'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
             )
             return response
-        return JsonResponse(persons_saved.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
+        return JsonResponse(person_serializer.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 
 
 # SiteView

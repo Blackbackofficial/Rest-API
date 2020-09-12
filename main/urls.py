@@ -15,8 +15,8 @@ urlpatterns = [
     # path('person/<int:pk>', PersonView.as_view()),
     # path('persons/<int:pk>', PersonView.as_view()),
     # Rest API Url
-    url(r'^persons/(?P<pk>[0-9]+)', views.get_persons),
-    url(r'^persons', views.all_persons, name='persons'),
+    path('persons/<int:pk>', views.get_persons),
+    path('persons', views.all_persons, name='persons'),
     url(r'^person/(?P<pk>[0-9]+)', views.up_del_person),
     url(r'^person', views.creat_persons, name='person'),
 ]

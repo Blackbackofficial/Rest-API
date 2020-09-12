@@ -18,5 +18,5 @@ urlpatterns = [
     path('persons/<int:pk>', views.get_persons),
     path('persons', views.all_persons, name='persons'),
     url(r'^person/(?P<pk>[0-9]+)', views.up_del_person),
-    url(r'^person', views.creat_persons, name='person'),
+    path('person', views.creat_persons, name='person'),
 ]

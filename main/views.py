@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
 from rest_framework.views import APIView
 from .forms import PersonForm
 from .models import Person
@@ -57,7 +56,8 @@ def up_del_person(request, pk):
 def creat_persons(request):
     if request.method == 'POST':
         persons = JSONParser().parse(request)
-        persons_saved = ""
+        last_id = Person.objects.count() + 1
+        persons['id'] = last_id
         serializer = PersonSerializer(data=persons)
         if serializer.is_valid(raise_exception=True):
             persons_saved = serializer.save()

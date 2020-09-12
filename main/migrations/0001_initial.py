@@ -15,7 +15,10 @@ class Migration(migrations.Migration):
             name='Person',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('person', models.TextField(verbose_name='Пользователь'))
+                ('name', models.CharField(max_length=20, help_text="Enter field name")),
+                ('age', models.IntegerField(help_text="Enter field age", blank=False)),
+                ('address', models.CharField(max_length=20, help_text="Enter field address", blank=False)),
+                ('work', models.CharField(max_length=20, help_text="Enter field address", blank=False)),
             ],
         ),
     ]

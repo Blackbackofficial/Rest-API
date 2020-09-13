@@ -8,7 +8,7 @@ from .models import Person
 from .serializers import PersonSerializer
 
 
-#  Rest API CRUD
+#  Rest API CRUD for Person
 @api_view(['GET'])
 def get_persons(request, pk):
     if request.method == 'GET':
@@ -60,10 +60,11 @@ def creat_persons(request):
         person_serializer = PersonSerializer(data=persons)
         if person_serializer.is_valid():
             persons_saved = person_serializer.save()
-            response = JsonResponse(persons_saved.id, status=status.HTTP_201_CREATED, safe=False)
-            response.headers['Location'] = (
+            response = JsonResponse('', status=status.HTTP_201_CREATED, safe=False)
+            response.headers['Location'] = \
+                (
                 'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
-            )
+                )
             return response
         return JsonResponse(person_serializer.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 

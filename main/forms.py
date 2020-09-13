@@ -7,13 +7,13 @@ class PersonForm(ModelForm):
         model = Person
         fields = ['name', 'age', 'address', 'work']
         widgets = {
-            "title": TextInput(attrs={
+            "name": TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите имя'
                 ''
             }),
-            "person": Textarea(attrs={
+            "address": Textarea(attrs={
                 'class': 'form-control',
-                'placeholder': 'Описание'
+                'placeholder': 'Адресс'
             })
         }

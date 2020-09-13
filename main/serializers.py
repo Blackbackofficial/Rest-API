@@ -3,12 +3,6 @@ from main.models import Person
 
 
 class PersonSerializer(serializers.ModelSerializer):
-    # id = serializers.IntegerField()
-    # name = serializers.CharField()
-    # age = serializers.CharField()
-    # address = serializers.CharField()
-    # work = serializers.CharField()
-
     def create(self, validated_data):
         return Person.objects.create(**validated_data)
 

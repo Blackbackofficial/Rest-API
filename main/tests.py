@@ -7,7 +7,7 @@ from main.models import Person
 # Тесты по API Person:
 # 1) Метода POST (/person), создание и наличие обьекта в БД, проверка header и его {id}
 # 2) Метода GET (/persons), все значения
-# 3) Метода DELETE (/person/{id})
+# 3) Метода DELETE (/person/{id}), + проверка на отсутствие
 # 4) Метода GET (/person/{id})
 # 5) Метод PATCH (/person/{id})
 
@@ -47,6 +47,9 @@ class API_Person_Test(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Person.objects.count(), 1)
+        url = reverse('get_persons', args='1')
+        get_response = self.client.get(url)
+        self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
         print('Success, test for DELETE person is completed')
 
     def test_get_person_for_id(self):
@@ -64,8 +67,7 @@ class API_Person_Test(APITestCase):
         data = {'age': 22, 'address': 'Sokolniki'}
         response = self.client.patch(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        person_DB = Person.objects.get(pk=1)
-        # i = i['Person']
+        person_DB = Person.objects.get(id=1)
         self.assertEqual(person_DB.age, 22)
         self.assertEqual(person_DB.address, 'Sokolniki')
         self.assertEqual(person_DB.name, 'Mary')

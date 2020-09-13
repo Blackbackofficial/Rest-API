@@ -61,8 +61,7 @@ def creat_persons(request):
         if person_serializer.is_valid():
             persons_saved = person_serializer.save()
             response = JsonResponse('', status=status.HTTP_201_CREATED, safe=False)
-            response.headers['Location'] = \
-                (
+            response.headers['Location'] = (
                 'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
                 )
             return response

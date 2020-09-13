@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 from .forms import PersonForm
 from .models import Person
 from .serializers import PersonSerializer
+import json
 
 
 #  Rest API CRUD for Person
@@ -61,7 +62,7 @@ def creat_persons(request):
         if person_serializer.is_valid():
             persons_saved = person_serializer.save()
             response = JsonResponse('', status=status.HTTP_201_CREATED, safe=False)
-            response.headers['Location'] = (
+            response['Location'] = (
                 'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
                 )
             return response

@@ -21,4 +21,4 @@ jobs:
         python -m pip install -r tests/requirements/py3.txt
     - name: Run tests
       run: |
-        python3 manage.py test
+        pytest

@@ -3,11 +3,11 @@
 {% block title %} {{ title }} {% endblock %}
 {% block content %}
 <h1>Вывод пользователей:</h1>
-    {% if persons != null %}
-        {% for obj in persons %} {# это Jinja2 те шаблон #}
+    {% if name != null %}
+        {% for obj in name %} {# это Jinja2 те шаблон #}
             <div class="alert alert-secondary">
-                <h3>{{ obj.person }}</h3>
-                <h3>{{ obj.title }}</h3>
+                <h3>{{ obj.name }}</h3>
+                <h3>{{ obj.age }}</h3>
             </div>
         {% endfor %}
         {% else %}

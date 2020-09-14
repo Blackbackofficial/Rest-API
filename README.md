@@ -19,7 +19,7 @@
 ##### API
 1) Запросы/ответы в в формате JSON
 2) Если запись по id не найдена, тогда возвращается HTTP статус 404 Not Found
-3) При создании новой записи о человека (метод POST /person) возвращается HTTP статус 201 Created с пустым телом и Header "Location: https://rsoi-person- service.herokuapp.com/person/{personId}", где personId – id созданной записи.
+3) При создании новой записи о человека (метод POST /person) возвращается HTTP статус 201 Created с пустым телом и Header "Location: https://rsoi-person-service.herokuapp.com/person/{personId}", где personId – id созданной записи.
 ##### GitHub Actions
 1) Деплой на Heroku
 2) Полная автоматизация процесса тестирования и деплоя 

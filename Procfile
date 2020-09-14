@@ -1,1 +1,1 @@
-web gunicorn --pythonpath src app:app
+web: gunicorn your_project_name.wsgi --log-file -

@@ -46,8 +46,12 @@ jobs:
         repository: Romanow/person-service-test
         path: integration-tests
         ref: master
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 11
     - name: Run integration tests
       uses: eskatos/gradle-command-action@v1
       with:
         build-root-directory: integration-tests
+        wrapper-directory: integration-tests
         arguments: clean test -PtargetUrl=https://rsoi-person-service.herokuapp.com

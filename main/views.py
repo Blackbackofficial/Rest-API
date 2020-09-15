@@ -55,7 +55,7 @@ def up_del_person(request, pk):
 
     if request.method == 'DELETE':
         person_safe.delete()
-        return JsonResponse('', status=status.HTTP_200_OK)
+        return JsonResponse('', status=status.HTTP_200_OK, safe=False)
 
 
 @api_view(['POST', 'GET'])

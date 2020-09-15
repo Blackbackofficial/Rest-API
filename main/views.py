@@ -21,12 +21,12 @@ def get_persons(request, pk):
             return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-def all_persons(request):
-    if request.method == 'GET':
-        persons = Person.objects.all()
-        serializer = PersonSerializer(persons, many=True)
-        return JsonResponse({"persons": serializer.data}, safe=False)
+# @api_view(['GET'])
+# def all_persons(request):
+#     if request.method == 'GET':
+#         persons = Person.objects.all()
+#         serializer = PersonSerializer(persons, many=True)
+#         return JsonResponse({"persons": serializer.data}, safe=False)
 
 
 @api_view(['PATCH', 'DELETE'])
@@ -52,8 +52,12 @@ def up_del_person(request, pk):
         }, status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 def creat_persons(request):
+    if request.method == 'GET':
+        persons = Person.objects.all()
+        serializer = PersonSerializer(persons, many=True)
+        return JsonResponse({"persons": serializer.data}, safe=False)
     if request.method == 'POST':
         persons = JSONParser().parse(request)
         last_id = Person.objects.count() + 1

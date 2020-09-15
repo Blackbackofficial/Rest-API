@@ -32,7 +32,6 @@ import json
 @api_view(['PATCH', 'DELETE', 'GET'])
 def up_del_person(request, pk):
     try:
-        pk = pk + 1
         person_safe = Person.objects.get(id=pk)
     except Person.DoesNotExist:
         return JsonResponse({'message': 'The tutorial does not exist or No Content'}, status=status.HTTP_404_NOT_FOUND)
@@ -41,10 +40,7 @@ def up_del_person(request, pk):
         try:
             persons = Person.objects.get(pk=pk)
             persons_serializer = PersonSerializer(persons)
-            i = int(persons_serializer.data['id']) - 1
-            res = persons_serializer.data
-            res['id'] = i
-            return JsonResponse(res, status=status.HTTP_200_OK)
+            return JsonResponse(persons_serializer.data, status=status.HTTP_200_OK)
         except Person.DoesNotExist:
             return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -55,10 +51,7 @@ def up_del_person(request, pk):
             person_save = serializer.save()
             persons = Person.objects.get(pk=pk)
             persons_serializer = PersonSerializer(persons)
-            i = int(persons_serializer.data['id']) - 1
-            res = persons_serializer.data
-            res['id'] = i
-            return JsonResponse(res, status=status.HTTP_200_OK, safe=False)
+            return JsonResponse(persons_serializer.data, status=status.HTTP_200_OK, safe=False)
 
     if request.method == 'DELETE':
         person_safe.delete()
@@ -69,24 +62,19 @@ def up_del_person(request, pk):
 def creat_persons(request):
     if request.method == 'GET':
         persons = Person.objects.all()
-        # sum = Person.objects.count()
         serializer = PersonSerializer(persons, many=True)
-        for i in serializer.data:
-            i = int(i['id']) - 1
-            serializer.data[i]['id'] = i
-
         return JsonResponse({"persons": serializer.data}, safe=False)
     if request.method == 'POST':
         persons = JSONParser().parse(request)
-        last_id = Person.objects.count()
+        last_id = Person.objects.count() + 1
         persons['id'] = last_id
         person_serializer = PersonSerializer(data=persons)
         if person_serializer.is_valid():
             persons_saved = person_serializer.save()
             response = JsonResponse('', status=status.HTTP_201_CREATED, safe=False)
             response['Location'] = (
-                'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(last_id)
-            )
+                'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
+                )
             return response
         return JsonResponse(person_serializer.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 

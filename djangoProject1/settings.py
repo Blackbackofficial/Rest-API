@@ -31,7 +31,7 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'tqsp1b^4*zha334638841o*!f4r*&0ujb!$x1+6=l^)r23jzv^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
@@ -136,5 +136,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+ADMINS = [
+    ('Ivan', 'Chernov-Ivan.1997@yandex.ru'),
+]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

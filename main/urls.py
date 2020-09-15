@@ -10,6 +10,6 @@ urlpatterns = [
     # Rest API path
     path('persons/<int:pk>', views.get_persons, name='get_persons'),
     path('persons', views.all_persons, name='all_persons'),
-    path('person/<int:pk>', views.up_del_person, name='up_del_person'),
-    path('person', views.creat_persons, name='creat_persons'),
+    path('persons/<int:pk>', views.up_del_person, name='up_del_person'),
+    path('persons', views.creat_persons, name='creat_persons'),
 ]

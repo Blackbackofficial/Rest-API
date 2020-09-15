@@ -8,7 +8,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('create', views.create, name='create'),
     # Rest API path
-    path('persons/<int:pk>', views.get_persons, name='get_persons'),
+    # path('persons/<int:pk>', views.get_persons, name='get_persons'),
     # path('persons', views.all_persons, name='all_persons'),
     path('persons/<int:pk>', views.up_del_person, name='up_del_person'),
     path('persons', views.creat_persons, name='creat_persons'),

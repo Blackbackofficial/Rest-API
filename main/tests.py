@@ -33,7 +33,7 @@ class API_Person_Test(APITestCase):
         print('Success, test method POST for creation and availability in the database is completed')
 
     def test_exist_person(self):
-        response = self.client.get(reverse('all_persons'))
+        response = self.client.get(reverse('creat_persons'))
         self.assertTrue(
             {'id': 1, 'name': 'Mary', 'age': '23', 'address': 'Iasnaia 5', 'work': 'Poduser'},
             {'id': 2, 'name': 'Egor', 'age': '21', 'address': 'Lininski', 'work': 'Prog'}
@@ -45,15 +45,15 @@ class API_Person_Test(APITestCase):
     def test_delete_person(self):
         url = reverse('up_del_person', args='1')
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Person.objects.count(), 1)
-        url = reverse('get_persons', args='1')
+        url = reverse('up_del_person', args='1')
         get_response = self.client.get(url)
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
         print('Success, test for DELETE person is completed')
 
     def test_get_person_for_id(self):
-        url = reverse('get_persons', args='2')
+        url = reverse('up_del_person', args='2')
         response = self.client.get(url)
         self.assertEqual(
             {'id': 2, 'name': 'Egor', 'age': 21, 'address': 'Lininski', 'work': 'Prog'},

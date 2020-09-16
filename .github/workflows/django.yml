@@ -38,13 +38,13 @@ jobs:
         git push heroku HEAD:master -f
         heroku logs --tail -a peaceful-shelf-78026
         heroku run python manage.py migrate -a peaceful-shelf-78026
-    - name: Run Tests
-      run: |
-        python3 manage.py test main.tests.API_Person_Test.test_get_person_for_id
-        python3 manage.py test main.tests.API_Person_Test.test_create_person
-        python3 manage.py test main.tests.API_Person_Test.test_exist_person
-        python3 manage.py test main.tests.API_Person_Test.test_delete_person
-        python3 manage.py test main.tests.API_Person_Test.test_update_person_for_id
+#    - name: Run Tests
+#      run: |
+#        python3 manage.py test main.tests.API_Person_Test.test_get_person_for_id
+#        python3 manage.py test main.tests.API_Person_Test.test_create_person
+#        python3 manage.py test main.tests.API_Person_Test.test_exist_person
+#        python3 manage.py test main.tests.API_Person_Test.test_delete_person
+#        python3 manage.py test main.tests.API_Person_Test.test_update_person_for_id
     - name: Checkout test repository
       uses: actions/checkout@v2
       with:

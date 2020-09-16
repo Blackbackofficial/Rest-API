@@ -43,7 +43,7 @@ class API_Person_Test(APITestCase):
         print('Success, test method GET to exists in the database is completed')
 
     def test_delete_person(self):
-        url = reverse('up_del_person', args='1')
+        url = reverse('up_del_person', args='2')
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Person.objects.count(), 1)

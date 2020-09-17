@@ -8,8 +8,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     strategy:
       max-parallel: 4
       matrix:
@@ -27,10 +36,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Migrate
+      run: python3 manage.py migrate
+    - name: Run Tests
+      run: |
+        python3 manage.py test
     - name: Deploy to Heroku
       env:
-        HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
-        HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        HEROKU_API_TOKEN: 9bb8f29a-3dab-4878-86a3-33ab7960a1cb
+        HEROKU_APP_NAME: peaceful-shelf-78026
       if: github.ref == 'refs/heads/master' && job.status == 'success'
       run: |
         git remote add heroku https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
@@ -38,13 +52,7 @@ jobs:
         git push heroku HEAD:master -f
         heroku logs --tail -a peaceful-shelf-78026
         heroku run python manage.py migrate -a peaceful-shelf-78026
-    - name: Run Tests
-      run: |
-        python3 manage.py test main.tests.API_Person_Test.test_get_person_for_id
-        python3 manage.py test main.tests.API_Person_Test.test_create_person
-        python3 manage.py test main.tests.API_Person_Test.test_exist_person
-        python3 manage.py test main.tests.API_Person_Test.test_delete_person
-        python3 manage.py test main.tests.API_Person_Test.test_update_person_for_id
+        heroku run python3 manage.py flush -a peaceful-shelf-78026
     - name: Checkout test repository
       uses: actions/checkout@v2
       with:
@@ -59,4 +67,4 @@ jobs:
       with:
         build-root-directory: integration-tests
         wrapper-directory: integration-tests
-        arguments: clean test -PtargetUrl=https://peaceful-shelf-78026.herokuapp.com/
+        arguments: clean test -PtargetUrl=https://peaceful-shelf-78026.herokuapp.com

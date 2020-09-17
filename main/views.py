@@ -9,30 +9,9 @@ from .serializers import PersonSerializer
 import json
 
 
-#  Rest API CRUD for Person
-# @api_view(['GET'])
-# def get_persons(request, pk):
-#     if request.method == 'GET':
-#         try:
-#             persons = Person.objects.get(pk=pk)
-#             persons_serializer = PersonSerializer(persons)
-#             return JsonResponse(persons_serializer.data)
-#         except Person.DoesNotExist:
-#             return JsonResponse({'message': 'The tutorial does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
-
-# @api_view(['GET'])
-# def all_persons(request):
-#     if request.method == 'GET':
-#         persons = Person.objects.all()
-#         serializer = PersonSerializer(persons, many=True)
-#         return JsonResponse({"persons": serializer.data}, safe=False)
-
-
-@api_view(['PATCH', 'DELETE', 'GET'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 def up_del_person(request, pk):
     try:
-        i = Person.objects.all()
         person_safe = Person.objects.get(id=pk)
     except Person.DoesNotExist:
         return JsonResponse({'message': 'The tutorial does not exist or No Content'}, status=status.HTTP_404_NOT_FOUND)
@@ -61,10 +40,12 @@ def up_del_person(request, pk):
 
 @api_view(['POST', 'GET'])
 def creat_persons(request):
+
     if request.method == 'GET':
         persons = Person.objects.all()
         serializer = PersonSerializer(persons, many=True)
         return JsonResponse(serializer.data, safe=False)
+
     if request.method == 'POST':
         persons = JSONParser().parse(request)
         last_id = Person.objects.count() + 1

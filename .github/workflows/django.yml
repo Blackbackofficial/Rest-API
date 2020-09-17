@@ -37,7 +37,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Migrate
-      run: python3 manage.py migrate
+      run: |
+        python3 manage.py migrate
+        python3 manage.py collectstatic
     - name: Run Tests
       run: |
         python3 manage.py test main.tests.API_Person_Test.test_get_person_for_id

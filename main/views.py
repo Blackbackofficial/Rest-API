@@ -32,6 +32,7 @@ import json
 @api_view(['PATCH', 'DELETE', 'GET'])
 def up_del_person(request, pk):
     try:
+        i = Person.objects.all()
         person_safe = Person.objects.get(id=pk)
     except Person.DoesNotExist:
         return JsonResponse({'message': 'The tutorial does not exist or No Content'}, status=status.HTTP_404_NOT_FOUND)
@@ -63,7 +64,7 @@ def creat_persons(request):
     if request.method == 'GET':
         persons = Person.objects.all()
         serializer = PersonSerializer(persons, many=True)
-        return JsonResponse({"persons": serializer.data}, safe=False)
+        return JsonResponse(serializer.data, safe=False)
     if request.method == 'POST':
         persons = JSONParser().parse(request)
         last_id = Person.objects.count() + 1
@@ -73,8 +74,8 @@ def creat_persons(request):
             persons_saved = person_serializer.save()
             response = JsonResponse('', status=status.HTTP_201_CREATED, safe=False)
             response['Location'] = (
-                'Location', 'https://rsoi-person-service.herokuapp.com/person/{}'.format(persons_saved.pk)
-                )
+                'Location', 'https://rsoi-person-service.herokuapp.com/persons/{}'.format(persons_saved.pk)
+            )
             return response
         return JsonResponse(person_serializer.errors, status=status.HTTP_404_NOT_FOUND, safe=False)
 

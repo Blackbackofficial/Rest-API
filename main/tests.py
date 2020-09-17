@@ -21,7 +21,7 @@ class API_Person_Test(APITestCase):
         data = {'name': 'Ivan', 'age': 21, 'address': 'Lininski', 'work': 'Prog'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(
-            "('Location', 'https://rsoi-person-service.herokuapp.com/person/{}')".format(Person.objects.get(id=3).id),
+            "('Location', 'https://rsoi-person-service.herokuapp.com/persons/{}')".format(Person.objects.get(id=3).id),
             response['Location']
         )
         self.assertEqual(Person.objects.get(id=3).name, 'Ivan')
@@ -34,10 +34,11 @@ class API_Person_Test(APITestCase):
 
     def test_exist_person(self):
         response = self.client.get(reverse('creat_persons'))
+        i = response.json()
         self.assertTrue(
             {'id': 1, 'name': 'Mary', 'age': '23', 'address': 'Iasnaia 5', 'work': 'Poduser'},
             {'id': 2, 'name': 'Egor', 'age': '21', 'address': 'Lininski', 'work': 'Prog'}
-            in response.json().get('persons')
+            in response.json()
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print('Success, test method GET to exists in the database is completed')
@@ -47,7 +48,6 @@ class API_Person_Test(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Person.objects.count(), 1)
-        url = reverse('up_del_person', args='1')
         get_response = self.client.get(url)
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
         print('Success, test for DELETE person is completed')

@@ -1,5 +1,5 @@
 # Rest-API Django
-Технологии: Python, Django, GitHub Actions
+Технологии: Python, Django, GitHub Actions, PostgresSQL
 
 #### 1) Делаем REST API CRUD  с использованием библиотеки rest framework
 

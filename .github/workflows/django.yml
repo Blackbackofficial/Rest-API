@@ -58,7 +58,7 @@ jobs:
         git push heroku HEAD:master -f
         heroku logs --tail -a peaceful-shelf-78026
         heroku run python manage.py migrate -a peaceful-shelf-78026
-    - name: Checkout test repository
+    - name: Checkout test repositoryy
       uses: actions/checkout@v2
       with:
         repository: Romanow/person-service-test

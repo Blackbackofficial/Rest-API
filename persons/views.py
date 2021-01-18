@@ -64,7 +64,7 @@ def creat_persons(request):
 # SiteView
 def index(request):
     persons = Person.objects.order_by('-name')  # А так же можно отсортировать полюбому другому полю, можно указать
-    return render(request, 'main/index.html',
+    return render(request, 'persons/index.html',
                   {
                       'title': 'Главная страница',
                       'name': persons
@@ -72,7 +72,7 @@ def index(request):
 
 
 def about(request):
-    return render(request, 'main/about.html')
+    return render(request, 'persons/about.html')
 
 
 def create(request):
@@ -81,7 +81,7 @@ def create(request):
         form = PersonForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('main')
+            return redirect('persons')
         else:
             error = 'Ошибка'
 
@@ -90,4 +90,4 @@ def create(request):
         'form': form,
         'error': error
     }
-    return render(request, 'main/create.html', context)
+    return render(request, 'persons/create.html', context)

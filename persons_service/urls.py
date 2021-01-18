@@ -1,4 +1,4 @@
-"""djangoProject1 URL Configuration
+"""persons_service URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -18,6 +18,6 @@ from django.urls import path, include  # наши функции
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # если мы переходим на наш главный сайт
-    path('', include("main.urls")),  # тогда переходим в файл urls нашего проекта main
-    # path('', include("main.urls")),
+    path('', include("persons.urls")),  # тогда переходим в файл urls нашего проекта persons
+    # path('', include("persons.urls")),
 ]
